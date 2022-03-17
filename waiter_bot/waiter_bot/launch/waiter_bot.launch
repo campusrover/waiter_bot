@@ -1,3 +1,0 @@
-<launch>
-    <node name="ui" pkg="waiter_bot" type ="ui.py" output="screen"/>
-</launch>
