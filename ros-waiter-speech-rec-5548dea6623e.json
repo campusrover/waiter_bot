@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ros-waiter-speech-rec",
+  "private_key_id": "5548dea6623e9cdd8753ae8a359c72b801569dfe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCrXx8XFYDUq1tx\n2559p3pgQMDCyALlpjqTTCvU6kbXYeMd8E3hj9M6h1au5zaM1CDVFQzRnDGNd9T2\n+oV2dkmCSBUKNRqNgAIX7D5xY3fYH+4Oce7cNBB4bsOAAztVI8JmhR/beBYEMzzA\nwDqwEcIWEJLwXxdI+1aa5m+p54+MlGK9a2bkt84kELFdTDtXEt4YGndtNWiT/T68\nj+hAjqafWvRfIC27AROUZrej0XQhC2XlfV5I2HB24PPz43C5AHODUMGPvEZUqRGK\nt65+nVzLE5Mhb/D9guIVtZukGlpL8SIe3eVSWku3z5t8rQxqXmXaFpEL+F0yfo1F\n3QOTn5O3AgMBAAECggEABCgauXyJf4GFJBHGfL9yWZfJt5wSgGDgMXWsDx0GEwPK\nRVLwceOgzIVSx1Cn7RHFW6NM/ocHHZbIbCV7mnnm8XhDMmIb0om8ZbmI1PhS5tdX\nbO5sh00eJIn72zEbVlCjzrU+17ll3XcjdWkbm+zpuiz5gjPU38F0mwFkBuaZf8Jh\nh8rYNK5kUtbnCvrmghh4KkpbwhPBt0FuGoVwdC/rcxedNxvy3TwHt1BLMwru2tiA\njhv5PKY2j1RVDkphvaEMpma/C1FDuJkuEeGW/vE7Cd1rXmPf+zelRC+jDwg95XYP\ncwd9VMGpfpppZ9URl1EcDUoHNHZN8CSR4uV9iqLSyQKBgQDwDfuEknb6up56EJpt\nJ2y8K9qFJUItqx8ZhdW55Q6DAr12He7BH5V+seVA4JV3+WpjlSCCa3PKt0gj0oea\nwCayefI3KjtyFX85bvid9Ydvbu/K/BXlYyqCJGim7AHliRRqn2Qno4RhubO0RHGE\ntiIyG3Mj60dpYo7N5bnnHIWO6wKBgQC2wTcr8h/cPpizMw9xVobC0imwh3rmlPbm\nn+OcYv9DJmKmVmmIwrH0NJNFC2krIQF4971nzK73lWIelTp7ZqSWxSiX0J94laLL\nBEayZj0Wy4vnPvSzT3tqyNT2a4afX+A5gkwoG0tjF9RSyIoW0tUZO1x5cwCeI3MY\nBiOPmshTZQKBgQDlCWI91gTBKsdDzY2ZsbD0RJ8kxCzFJ+zvTBtkVyCmbTnZdau0\nBW98Rz1lziGuK4GPa9xtsxnygzbIPvl08/q39NPeQGQhcFNHuBJrm7TR5DXUJPq7\nNwd6zkQvZyRUHZsmM9e6XjBTkXvc9iSdK62qwzfzQGuNKCT6XEIoOLVRawKBgQCp\n7WQoZ3y6ZDXFwf9k6ghp09JRwtdC2VXtwNN5kQ86V9G4SnbcY/PlVpFszJxgLtNY\nsDob7tTtfqf6OdVj8l+tlOsWpjPxgmkZDgPSU4AP1vlh7kbHB2uBMfXansZRIGuz\n7XR0glSJchnJU5AagrUEPg7RGl6DrACTYPnlyAzmhQKBgQDauT+/na1InlslABMt\nkTAd1wB8y3eVGocUrsgohpJGu1tWzZOoUQw8VxGNw7B3viY4XfNOlQEThZVVgvzE\nMLJv1fnCthmBqrNi2ne6sIdqLcxaT2506ZrmGRweMV6fN7bTAKDO8L9PGveGlnOf\nlhEl5gVHHfwZ1GTRq4TzXelx/A==\n-----END PRIVATE KEY-----\n",
+  "client_email": "robotwaiter@ros-waiter-speech-rec.iam.gserviceaccount.com",
+  "client_id": "108759954417689548370",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/robotwaiter%40ros-waiter-speech-rec.iam.gserviceaccount.com"
+}
