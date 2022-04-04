@@ -3,6 +3,7 @@
 import rospy, actionlib
 from std_msgs.msg import String
 from loc_dictionary import coordinate_dict
+from menu_constants import food_menu, drink_menu
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 def goal_pose(loc_coordinate):
@@ -18,7 +19,11 @@ def goal_pose(loc_coordinate):
     return goal_pose
 
 def loc_cb(msg):
-    location_name = msg.data
+    entity_name = msg.data
+    if entity_name in food_menu:
+        location_name = "pizza-table"
+    elif entity_name in drink_menu:
+        location_name = "drink-table"
     location_coordinate = coordinate_dict[location_name]
     goal = goal_pose(location_coordinate)
     
