@@ -6,24 +6,50 @@ from ttkthemes import ThemedStyle
 import rospy
 
 from std_msgs.msg import String
+from menu_constants import drink_menu, food_menu
 
+def state_cb(msg):
+    global current_state
+    current_state = msg.data
 
 
 rospy.init_node("ui")
 command_pub = rospy.Publisher("location_string", String, queue_size=1) 
+state_sub = rospy.Subscriber("state_string", String, state_cb)
+current_state = "INITIALIZING"
 
-def publish_selected(menu):
-    command_pub.publish(menu)
+item_unavailable = ""
+window = tk.Tk()
+window.geometry("350x250")
+window.title("Robot Waiter")
+style = ThemedStyle(window)
+style.set_theme("breeze")
+order = tk.StringVar()
+unavailable_label = ttk.Label(window, text=item_unavailable)
+text_field = ttk.Entry(window, textvariable=order)
+
+def publish_order(event=None):
+    entities = set(order.get().split())
+    entities = list(entities.intersection(drink_menu).union(entities.intersection(food_menu)))
+    if entities:
+        entities = ' '.join(entities)
+        command_pub.publish(entities)
+        item_unavailable = ""
+    else:
+        item_unavailable = "We don't have that"
+    text_field.delete(0, len(order.get()))
+    unavailable_label.configure(text=item_unavailable)
+    unavailable_label.update()
 
 while not rospy.is_shutdown():
-    window = tk.Tk()
-    window.geometry("350x250")
-    window.title("Robot Waiter")
-    style = ThemedStyle(window)
-    style.set_theme("breeze")
-    menu = tk.StringVar()
-    menu.set("...")
-    drop = ttk.OptionMenu(window, menu, "Select location", "dining", "kitchen", "pantry", command=publish_selected )
-    drop.pack()
+    window.bind('<Return>', publish_order)
+    state_label = ttk.Label(window, text=current_state)
+    state_label.pack()
+    input_label = ttk.Label(window, text="Enter your order")
+    input_label.pack()
+    text_field.pack()
+    submit_button = ttk.Button(window, text="Submit Order", command=publish_order)
+    submit_button.pack()
+    unavailable_label.pack()
     window.mainloop()
 
