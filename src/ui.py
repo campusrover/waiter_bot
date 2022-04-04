@@ -7,7 +7,7 @@ import rospy
 
 from std_msgs.msg import String
 from menu_constants import drink_menu, food_menu
-
+#TODO update label that displays robot's state
 def state_cb(msg):
     global current_state
     current_state = msg.data
@@ -28,6 +28,7 @@ order = tk.StringVar()
 unavailable_label = ttk.Label(window, text=item_unavailable)
 text_field = ttk.Entry(window, textvariable=order)
 
+#sends order to 'location_string' ex: 'I want pepperoni pizza and diet-coke' sends 'pepperoni diet-coke'
 def publish_order(event=None):
     entities = set(order.get().split())
     entities = list(entities.intersection(drink_menu).union(entities.intersection(food_menu)))
@@ -42,6 +43,7 @@ def publish_order(event=None):
     unavailable_label.update()
 
 while not rospy.is_shutdown():
+    #order can be submitted with enter/return key or by pressing submit button
     window.bind('<Return>', publish_order)
     state_label = ttk.Label(window, text=current_state)
     state_label.pack()
