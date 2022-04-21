@@ -1,4 +1,4 @@
 <launch>
     <node name="ui" pkg="waiter_bot" type ="ui.py" output="screen"/>
-    <node name="pathplanner" pkg="waiter_bot" type ="pathplan.py"/>
+    <node name="pathplanner" pkg="waiter_bot" type ="pathplan_v2.py" output="screen"/>
 </launch>
