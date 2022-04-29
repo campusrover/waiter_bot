@@ -6,8 +6,9 @@ from nav_msgs.msg import Odometry
 from loc_dictionary import coordinate_dict
 from menu_constants import food_menu, drink_menu
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-from waiter_bot.msg import Order.msg
+from waiter_bot.msg import Order
 
+distance_threshold = .1
 def goal_pose(loc_coordinate):
     goal_pose = MoveBaseGoal()
     goal_pose.target_pose.header.frame_id = 'map'
@@ -26,8 +27,8 @@ def order_cb(msg):
     name_item = msg.name.data
     order_entry = {
         "name": name_item, 
-        "pizza-table": [food_item],
-        "drink-table": [drink_item]
+        "pizza-table": food_item,
+        "drink-table": drink_item
     }
     navigate_to_tables(msg, order_entry)
 
@@ -43,52 +44,52 @@ def navigate_to_tables(msg, order_entry):
 
     if len(order_entry["pizza-table"]) > 0:
         # send location goal to client 
-        location_coordinate = coordinate_dict[table]
+        location_coordinate = coordinate_dict["pizza-table"]
         goal = goal_pose(location_coordinate)
         client.send_goal(goal)
-        print(f"Heading to {table} at coordinates: {location_coordinate}")
+        #print(f"Heading to {table} at coordinates: {location_coordinate}")
         
         while client.get_result() == None:
             #print("navigating while loop ...")
             odom_msg_rough = rospy.wait_for_message('odom', Odometry)
             curr_pos = odom_msg_rough.pose.pose.position
             
-            if (abs(curr_pos.x - location_coordinate[0] < 0.5) and abs(curr_pos.y - location_coordinate[1])< 0.5):
+            if (abs(curr_pos.x - location_coordinate[0] < distance_threshold) and abs(curr_pos.y - location_coordinate[1])< distance_threshold):
                 client.cancel_goal()
                 print("goal reached")
                 break
         
         # tell waiter what items need to be placed on tray
-        print(f"I need {order_entry["pizza-table"]}")
+        print(f"I need fuud")
         # pub_order.publish(msg)
         
         # wait for confirmation that waiter has placed items on tray
         ready_to_go_string = ""
         while ready_to_go_string != "go":
             #print("Waiting for items to be placed on tray...")
-            ready_msg = rospy.wait_for_message('order_ready_string', String)
+            ready_msg = rospy.wait_for_message('order_picked_up', String)
             ready_to_go_string = ready_msg.data 
         print("item placed. Moving on.")
 
     if len(order_entry["drink-table"]) > 0:
         # send location goal to client 
-        location_coordinate = coordinate_dict[table]
+        location_coordinate = coordinate_dict["drink-table"]
         goal = goal_pose(location_coordinate)
         client.send_goal(goal)
-        print(f"Heading to {table} at coordinates: {location_coordinate}")
+        #print(f"Heading to {table} at coordinates: {location_coordinate}")
         
         while client.get_result() == None:
             #print("navigating while loop ...")
             odom_msg_rough = rospy.wait_for_message('odom', Odometry)
             curr_pos = odom_msg_rough.pose.pose.position
             
-            if (abs(curr_pos.x - location_coordinate[0] < 0.5) and abs(curr_pos.y - location_coordinate[1])< 0.5):
+            if (abs(curr_pos.x - location_coordinate[0] < distance_threshold) and abs(curr_pos.y - location_coordinate[1])< distance_threshold):
                 client.cancel_goal()
                 print("goal reached")
                 break
         
         # tell waiter what items need to be placed on tray
-        print(f"I need {order_entry['drink-table']}")
+        print(f"I need drink")
         # pub_order.publish(msg)
         
         # wait for confirmation that waiter has placed items on tray
@@ -109,7 +110,7 @@ def navigate_to_tables(msg, order_entry):
         print(f"curr_pos: {curr_pos.x}, {curr_pos.y}")
         print(f"goal_pos: {ori_pos.x}, {ori_pos.y}")
         
-        if (abs(curr_pos.x - ori_pos.x < 0.5) and abs(curr_pos.y - ori_pos.y)< 0.5):
+        if (abs(curr_pos.x - ori_pos.x < distance_threshold) and abs(curr_pos.y - ori_pos.y)< distance_threshold):
             client.cancel_goal()
             print("goal reached")
             break
