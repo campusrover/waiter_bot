@@ -1,3 +1,4 @@
 <launch>
     <node name="pathplanner" pkg="waiter_bot" type ="pathplan_v5.py" output="screen"/>
+    <node name="alexa_hook" pkg="waiter_bot" type="waiter_bot_alexa_hook.py"/>
 </launch>
