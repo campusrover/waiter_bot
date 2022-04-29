@@ -60,7 +60,7 @@ def navigate_to_tables(msg, order_entry):
         
         # tell waiter what items need to be placed on tray
         print(f"I need {order_entry["pizza-table"]}")
-        pub_order.publish(msg)
+        # pub_order.publish(msg)
         
         # wait for confirmation that waiter has placed items on tray
         ready_to_go_string = ""
@@ -89,13 +89,13 @@ def navigate_to_tables(msg, order_entry):
         
         # tell waiter what items need to be placed on tray
         print(f"I need {order_entry['drink-table']}")
-        pub_order.publish(msg)
+        # pub_order.publish(msg)
         
         # wait for confirmation that waiter has placed items on tray
         ready_to_go_string = ""
         while ready_to_go_string != "go":
             #print("Waiting for items to be placed on tray...")
-            ready_msg = rospy.wait_for_message('order_ready_string', String)
+            ready_msg = rospy.wait_for_message('order_picked_up', String)
             ready_to_go_string = ready_msg.data 
         print("item placed. Moving on.")       
 
@@ -125,7 +125,8 @@ client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 client.wait_for_server()
 
 # subscribe to ui topic
-sub_Order = rospy.Subscriber('Order', Order, order_cb)
-sub_order = rospy.Subscriber('order_ready_string', String)
-pub_order = rospy.Publisher('Delivery', Order, queue_size = 1)
+sub_order = rospy.Subscriber('orders', Order, order_cb)
+sub_picked = rospy.Subscriber('order_picked_up', String)
+sub_talk = rospy.Subscriber('person_talking', String)
+pub_order = rospy.Publisher('deliveries', Order, queue_size = 1)
 rospy.spin()
