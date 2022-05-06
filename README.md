@@ -2,6 +2,11 @@
 
 WaiterBot is a modular solution to automated catering. 
 
+## Team 
+
+Ben Soli (bsoli@brandeis.edu)
+Harry Zhu (zhuh@brandeis.edu)
+
 ###### How to Use the Code:
 ```git clone  https://github.com/campusrover/waiter_bot.git``` </br>
  ```cm``` </br>
