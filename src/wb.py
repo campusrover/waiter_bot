@@ -27,29 +27,89 @@ def goal_pose(loc_coordinate):
     return goal_pose
 
 delivery_waypoints = []
+delivery_coordinates = []
 delivery_needed = False 
-food_goal = goal_pose(coordinate_dict['pizza-table'])
-drink_goal = goal_pose(coordinate_dict['drink-table'])
+food_coordinate = coordinate_dict['pizza-table']
+drink_coordinate = coordinate_dict['drink-table']
+food_goal = goal_pose(food_coordinate)
+drink_goal = goal_pose(drink_coordinate)
+order_log = dict()
+
+# need a dict of orders, send back when done
+# need mapping from order name to places being visted for that order
+# cancel order cb should remove the location of that person from the path,
+# if all that is left after is the food and or drink table clear the queue, 
+
+
+person_talking = ""
 
 def order_cb(msg):
-    global delivery_waypoints, delivery_needed
-
+    global delivery_waypoints, delivery_coordinates, delivery_needed, order_log
+    name = msg.name.data
+    food = msg.food.data
+    drink = msg.drink.data
     odom_msg = rospy.wait_for_message('odom', Odometry)
     message = odom_msg.pose.pose
     ori_pos = message.position
     quat = message.orientation
-    original_goal = goal_pose([ori_pos.x, ori_pos.y, ori_pos.z, quat.x, quat.y, quat.z, quat.w])
-
+    original_coordinate = [ori_pos.x, ori_pos.y, ori_pos.z, quat.x, quat.y, quat.z, quat.w]
+    order_path = []
+    order_goals = []
+    original_goal = goal_pose(original_coordinate)
     if (len(delivery_waypoints) == 0) or (delivery_waypoints[0] != food_goal):
-        delivery_waypoints.append(food_goal)
-        delivery_waypoints.append(drink_goal)
-    delivery_waypoints.append(goal_pose(original_goal))
+        if food:
+            delivery_waypoints.append(food_goal)
+            delivery_coordinates.append(food_coordinate)
+            order_path.append(food_coordinate)
+            order_goals.append(food_goal)
+        if drink:
+            delivery_waypoints.append(drink_goal)
+            delivery_coordinates.append(drink_coordinate)
+            order_path.append(drink_coordinate)
+            order_goals.append(drink_goal)
+    order_path.append(original_coordinate)
+    order_goals.append(original_goal)
+    order_log[name] = (msg, order_path, order_goals)
+    delivery_waypoints.append(original_goal)
+    delivery_coordinates.append(original_coordinate)
     delivery_needed = True
+
+def person_talking_cb(msg):
+    global person_talking
+    person_talking = msg.data
+
+def done_talking_cb(msg):
+    global done_talking
+    done_talking = msg.data
+
+def cancel_order_cb(msg):
+    global delivery_coordinates, delivery_waypoints
+    name = msg.name.data
+    print('order being canceled')
+    print(len(delivery_coordinates))
+    path = order_log[name][1]
+    per_loc = path[-1]
+    goals = order_log[name][2]
+    per_goal = goals[-1]
+    del order_log[name]
+    if per_loc in delivery_coordinates:
+        delivery_coordinates.remove(per_loc)
+    # clears everything if there are no orders after cancelation
+    if not len(order_log):
+        delivery_coordinates = []
+        delivery_waypoints = []
+        delivery_needed = False
+        keep_wandering = True
+    else:
+        if per_goal in delivery_waypoints:
+            delivery_waypoints.remove(per_goal)
+    print(len(delivery_coordinates))
 
 # subscribe to topics
 sub_order = rospy.Subscriber('orders', Order, order_cb)
-sub_talking = rospy.SubScriber('person_talking', String)
-sub_done_talking = rospy.SubScriber('done_talking', String)
+cancel_order_sub = rospy.Subscriber('canceled_order', Order, cancel_order_cb)
+sub_talking = rospy.Subscriber('person_talking', String, person_talking_cb)
+sub_done_talking = rospy.Subscriber('done_talking', String, done_talking_cb)
 sub_picked_up = rospy.Subscriber('order_picked_up', String)
 
 # publish to topic 
@@ -57,12 +117,13 @@ pub_order = rospy.Publisher('deliveries', Order, queue_size = 1)
 
 # WANDER state
 def wander():
-    global delivery_waypoints, delivery_needed
+    global delivery_waypoints, delivery_needed, person_talking, done_talking
 
     keep_wandering = True
     while keep_wandering:
         wander_location = random.choice(wander_locations)
-        client.send_goal(goal_pose(wander_location))
+        wander_goal = goal_pose(wander_location)
+        client.send_goal(wander_goal)
 
         while client.get_result() == None:
             odom_msg_rough = rospy.wait_for_message('odom', Odometry)
@@ -73,6 +134,15 @@ def wander():
                 print("goal cancel-reached")
                 break
 
+            if person_talking == 'talking':
+                print("talking test")
+                client.cancel_goal()
+                done_talking = rospy.wait_for_message('done_talking', String)
+                print("done talking")
+                person_talking = ""
+                done_talking = ""
+                client.send_goal(wander_goal)
+
             if delivery_needed:
                 client.cancel_goal()
                 keep_wandering = False
@@ -82,6 +152,35 @@ def wander():
 
 def execute():
     print("Executing")
+    while len(delivery_waypoints) > 0:
+        curr_goal = delivery_waypoints.pop(0)
+        curr_goal_coordinate = delivery_coordinates.pop(0)
+        navigate(curr_goal, curr_goal_coordinate)
+    
+
+def navigate(goal, goal_coordinate):
+    global delivery_waypoints, delivery_needed, person_talking, done_talking
+
+    print("navigating")
+    client.send_goal(goal)
+    while client.get_result() == None:
+        odom_msg_rough = rospy.wait_for_message('odom', Odometry)
+        curr_pos = odom_msg_rough.pose.pose.position
+        
+        if (abs(curr_pos.x - goal_coordinate[0] < 0.5) and abs(curr_pos.y - goal_coordinate[1])< 0.5):
+            client.cancel_goal()
+            print("goal cancel-reached")
+            break
+        
+        if person_talking == 'talking':
+            print("talking test")
+            client.cancel_goal()
+            done_talking = rospy.wait_for_message('done_talking', String)
+            print("done talking")
+            person_talking = ""
+            done_talking = ""
+            client.send_goal(goal)
+
 
 
 # EXECUTE state
@@ -94,19 +193,6 @@ def execute():
     # if past_foodtable is False, add new Order.msg to order_log
 # resume current navigation when done_talking published to /done_talking topic 
 
-def determine_table(order_log):
-    need_food = False
-    need_drink = False
-    for entry in order_log:
-        if entry[0] != None:
-            need_food = True
-        if entry[1] != None:
-            need_drink = True
-    return need_food, need_food
 
-def add_order(msg):
-    orders.append(msg)
-    entry = (msg.food.data, msg.drink.data)
-    order_log1.append(entry)
-
+wander()
 rospy.spin()
