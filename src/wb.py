@@ -35,6 +35,8 @@ food_goal = goal_pose(food_coordinate)
 drink_goal = goal_pose(drink_coordinate)
 order_log = dict()
 
+navigation_tolerance = 0.2
+
 # need a dict of orders, send back when done
 # need mapping from order name to places being visted for that order
 # cancel order cb should remove the location of that person from the path,
@@ -129,7 +131,7 @@ def wander():
             odom_msg_rough = rospy.wait_for_message('odom', Odometry)
             curr_pos = odom_msg_rough.pose.pose.position
             
-            if (abs(curr_pos.x - wander_location[0] < 0.5) and abs(curr_pos.y - wander_location[1])< 0.5):
+            if (abs(curr_pos.x - wander_location[0] < navigation_tolerance) and abs(curr_pos.y - wander_location[1])< navigation_tolerance):
                 client.cancel_goal()
                 print("goal cancel-reached")
                 break
@@ -167,7 +169,7 @@ def navigate(goal, goal_coordinate):
         odom_msg_rough = rospy.wait_for_message('odom', Odometry)
         curr_pos = odom_msg_rough.pose.pose.position
         
-        if (abs(curr_pos.x - goal_coordinate[0] < 0.5) and abs(curr_pos.y - goal_coordinate[1])< 0.5):
+        if (abs(curr_pos.x - goal_coordinate[0] < navigation_tolerance) and abs(curr_pos.y - goal_coordinate[1])< navigation_tolerance):
             client.cancel_goal()
             print("goal cancel-reached")
             break
@@ -180,7 +182,6 @@ def navigate(goal, goal_coordinate):
             person_talking = ""
             done_talking = ""
             client.send_goal(goal)
-
 
 
 # EXECUTE state
