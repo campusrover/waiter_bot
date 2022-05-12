@@ -1,4 +1,4 @@
 <launch>
-    <node name="waiterbot" pkg="waiter_bot" type ="waiterbot_navigation.py" output="screen"/>
+    <node name="waiterbot" pkg="waiter_bot" type ="waiterbot.py" output="screen"/>
     <node name="alexa_hook" pkg="waiter_bot" type="waiter_bot_alexa_hook.py"/>
 </launch>
