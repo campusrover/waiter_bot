@@ -49,7 +49,7 @@ def fallback_intent():
 
 @ask.intent('AMAZON.CancelIntent')
 def cancel_intent():
-    return statement('I didnt')
+    return statement('OK')
 
 @ask.intent('thank_you')
 def thank_you():
@@ -87,7 +87,7 @@ def deliver_order():
     return statement('I dont have any orders right now')
 
 
-# report order to the user when complete TODO write call back for order messages sent from navigation
+# report order to the user 
 @ask.intent('read_order')
 def read_order():
     if len(orders):
@@ -103,7 +103,7 @@ def read_order():
 def slow_service():
     return statement('speed isnt my problem, my problem is between the chair and the keyboard')
 
-# delete an order and  TODO send that order to navigation to either stop current move base or remove from itinerary
+# delete an order
 @ask.intent('cancel_order')
 def cancel_order():
     if not len(orders):
@@ -121,7 +121,7 @@ def cancel_order():
     del orders[name]
     return statement(response)
 
-# TODO delete this, it makes no sense from a design standpoint and IVR is too sensitive to this intent
+# cancel all orders, only used for debug purposes
 @ask.intent('cancel_all_orders')
 def cancel_all_orders():
     orders.clear()
