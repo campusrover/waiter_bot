@@ -8,9 +8,9 @@ Ben Soli (bsoli@brandeis.edu)
 Harry Zhu (zhuh@brandeis.edu)
 
 ###### How to Use the Code:
-```git clone  https://github.com/campusrover/waiter_bot.git``` </br>
- ```cm``` </br>
-Download ngrok and authorize ngrok token </br>
+1. ```git clone  https://github.com/campusrover/waiter_bot.git``` </br>
+2.  ```cm``` </br>
+3. Download ngrok and authorize ngrok token </br>
 ```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
 Have waiterbot skill on an Alexa device </br>
 ssh into your robot </br>
