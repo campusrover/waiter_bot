@@ -11,12 +11,12 @@ Harry Zhu (zhuh@brandeis.edu)
 1. ```git clone  https://github.com/campusrover/waiter_bot.git``` </br>
 2.  ```cm``` </br>
 3. Download ngrok and authorize ngrok token </br>
-```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
-Have waiterbot skill on an Alexa device </br>
-ssh into your robot </br>
-In waiter_bot/src ```bash ngrok_launch.sh``` </br>
-```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/demodaymod.yaml``` </br>
-```roslaunch waiter_bot waiter_bot.launch``` </br>
+4. ```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
+5. Have waiterbot skill on an Alexa device </br>
+6. ssh into your robot and do ```bringup``` </br>
+7. In waiter_bot/src ```bash ngrok_launch.sh``` </br>
+8. run command```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/demodaymod.yaml``` </br>
+9. run command```roslaunch waiter_bot waiter_bot.launch``` </br>
 
 WaiterBot aims to use the skills learned in the Autonomous Robot course to imagine the food-service of the future. 
 
