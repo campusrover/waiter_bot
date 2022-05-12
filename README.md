@@ -15,6 +15,7 @@ Download ngrok and authorize ngrok token </br>
 Have waiterbot skill on an Alexa device </br>
 ssh into your robot </br>
 In waiter_bot/src ```bash ngrok_launch.sh``` </br>
+```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/demodaymod.yaml``` </br>
 ```roslaunch waiter_bot waiter_bot.launch``` </br>
 
 WaiterBot aims to use the skills learned in the Autonomous Robot course to imagine the food-service of the future. 
