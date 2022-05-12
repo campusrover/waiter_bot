@@ -35,7 +35,7 @@ food_goal = goal_pose(food_coordinate)
 drink_goal = goal_pose(drink_coordinate)
 order_log = dict()
 
-navigation_tolerance = 0.2
+navigation_tolerance = 0.55
 
 # need a dict of orders, send back when done
 # need mapping from order name to places being visted for that order
@@ -119,7 +119,15 @@ pub_order = rospy.Publisher('deliveries', Order, queue_size = 1)
 
 # WANDER state
 def wander():
-    global delivery_waypoints, delivery_needed, person_talking, done_talking
+    print("Wandering")
+    global delivery_waypoints, delivery_coordinates, delivery_needed, order_log, person_talking, done_talking
+
+    delivery_needed = False
+    person_talking = ""
+    done_talking = ""
+    delivery_waypoints = []
+    delivery_coordinates = []
+    order_log = dict()
 
     keep_wandering = True
     while keep_wandering:
@@ -154,11 +162,12 @@ def wander():
 
 def execute():
     print("Executing")
-    while len(delivery_waypoints) > 0:
-        curr_goal = delivery_waypoints.pop(0)
-        curr_goal_coordinate = delivery_coordinates.pop(0)
-        navigate(curr_goal, curr_goal_coordinate)
-    
+    while len(delivery_waypoints) > 0 or len(order_log) > 0:
+        if len(delivery_waypoints) > 0:
+            curr_goal = delivery_waypoints.pop(0)
+            curr_goal_coordinate = delivery_coordinates.pop(0)
+            navigate(curr_goal, curr_goal_coordinate)
+    wander()
 
 def navigate(goal, goal_coordinate):
     global delivery_waypoints, delivery_needed, person_talking, done_talking
@@ -172,6 +181,18 @@ def navigate(goal, goal_coordinate):
         if (abs(curr_pos.x - goal_coordinate[0] < navigation_tolerance) and abs(curr_pos.y - goal_coordinate[1])< navigation_tolerance):
             client.cancel_goal()
             print("goal cancel-reached")
+            # if current location is person_location (stored in a dictionary with key name):
+            #   send order to be read by alexa
+            # del order_log[name]
+            if not (goal == food_goal or goal == drink_goal):
+                name = list(order_log.keys())[0]
+                order = order_log[name][0]
+                pub_order.publish(order)
+                del order_log[name]
+                ready_signal = ""
+
+            ready_msg = rospy.wait_for_message('order_picked_up', String)
+
             break
         
         if person_talking == 'talking':
@@ -179,6 +200,7 @@ def navigate(goal, goal_coordinate):
             client.cancel_goal()
             done_talking = rospy.wait_for_message('done_talking', String)
             print("done talking")
+            
             person_talking = ""
             done_talking = ""
             client.send_goal(goal)
