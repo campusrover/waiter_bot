@@ -34,11 +34,9 @@ drink_coordinate = coordinate_dict['drink-table']
 food_goal = goal_pose(food_coordinate)
 drink_goal = goal_pose(drink_coordinate)
 order_log = dict()
+person_talking = ""
 
 navigation_tolerance = 0.55
-
-
-person_talking = ""
 
 def order_cb(msg):
     global delivery_waypoints, delivery_coordinates, delivery_needed, order_log
