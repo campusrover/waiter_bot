@@ -14,7 +14,7 @@ Download ngrok and authorize ngrok token </br>
 ```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
 Have waiterbot skill on an Alexa device </br>
 ssh into your robot </br>
-In waiter_bot/src bash ngrok_launch.sh </br>
+In waiter_bot/src ```bash ngrok_launch.sh``` </br>
 ```roslaunch waiter_bot waiter_bot.launch``` </br>
 
 WaiterBot aims to use the skills learned in the Autonomous Robot course to imagine the food-service of the future. 
