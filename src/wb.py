@@ -37,11 +37,6 @@ order_log = dict()
 
 navigation_tolerance = 0.55
 
-# need a dict of orders, send back when done
-# need mapping from order name to places being visted for that order
-# cancel order cb should remove the location of that person from the path,
-# if all that is left after is the food and or drink table clear the queue, 
-
 
 person_talking = ""
 

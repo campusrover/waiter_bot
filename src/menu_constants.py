@@ -1,2 +1,2 @@
-food_menu = ["pepperoni", 'sausage', 'cheese', 'peppers', 'mushroom', 'onions', 'veggie', 'veggies']
-drink_menu = ['coke', 'diet coke', 'sprite', 'iced tea', 'water']
+food_menu = ["bagel", 'banana bread', 'pastry', 'croissant']
+drink_menu = ['coffee', 'water']
