@@ -13,11 +13,11 @@ Harry Zhu (zhuh@brandeis.edu)
 3. Download ngrok and authorize ngrok token </br>
 4. ```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
 5. Have waiterbot skill on an Alexa device </br>
-6. ssh into your robot</br>
+6. ```ssh``` into your robot</br>
 7. when you run ```bringup```, make sure your robot is physically located at its initial position on your map. So once you run ```bringup```, never move you robot. Otherwise, its odometry will be messed up and ```waiter_bot.py``` will not work as intended </br> 
-8. In waiter_bot/src ```bash ngrok_launch.sh``` </br>
-9. run command```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/yourmap.yaml``` </br>
-10. run command```roslaunch waiter_bot waiter_bot.launch``` </br>
+8. In waiter_bot/src, run ```bash ngrok_launch.sh``` </br>
+9. run ```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/yourmap.yaml``` to bringup rviz </br>
+10. run ```roslaunch waiter_bot waiter_bot.launch``` </br>
 
 WaiterBot aims to use the skills learned in the Autonomous Robot course to imagine the food-service of the future. 
 
