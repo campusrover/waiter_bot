@@ -200,17 +200,5 @@ def navigate(goal, goal_coordinate):
             done_talking = ""
             client.send_goal(goal)
 
-
-# EXECUTE state
-# Trigger: 
-    # Exit WANDER and enter EXECUTE when Order.msg published to /orders topic
-    # Exit EXECUTE and enter WANDER when order_log is empty 
-# main method: execute()
-# call execute_orderlog 
-# cancel current navigation when talking published to /person_talking topic
-    # if past_foodtable is False, add new Order.msg to order_log
-# resume current navigation when done_talking published to /done_talking topic 
-
-
 wander()
 rospy.spin()
