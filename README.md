@@ -14,7 +14,7 @@ Harry Zhu (zhuh@brandeis.edu)
 4. ```pip3 install flask-ask``` and ```sudo apt-install ros-noetic-navigation``` </br>
 5. Have waiterbot skill on an Alexa device </br>
 6. ssh into your robot</br>
-7. when you run ```bringup```, make sure your robot is physically located at its initial position on your map. So once you run ```bringup``` and start ```turtlebot3_navigation``` on line 9, don't move you rebot. Otherwise, its odometry will be messed up and ```waiter_bot.py``` will not work as intended </br> 
+7. when you run ```bringup```, make sure your robot is physically located at its initial position on your map. So once you run ```bringup```, never move you robot. Otherwise, its odometry will be messed up and ```waiter_bot.py``` will not work as intended </br> 
 8. In waiter_bot/src ```bash ngrok_launch.sh``` </br>
 9. run command```roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=/my_ros_data/yourmap.yaml``` </br>
 10. run command```roslaunch waiter_bot waiter_bot.launch``` </br>
